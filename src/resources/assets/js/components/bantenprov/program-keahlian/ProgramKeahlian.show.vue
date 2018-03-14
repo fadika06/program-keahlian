@@ -1,31 +1,85 @@
 <template>
-  <div>
+  <div class="card">
+    <div class="card-header">
+      <i class="fa fa-table" aria-hidden="true"></i> Show Program keahlian {{ model.label }}
 
-    <div class="card mb-3">
-      <div class="card-header">Grafik Produk Domestik Regional Bruto</div>
-      <div class="card-body">
-        <echarts-program-keahlian></echarts-program-keahlian>
-      </div><!-- /.card-body -->
-    </div><!-- /.card -->
-
-    <div class="row">
-      <div class="col-md-6">
-        <div class="card mb-3">
-          <div class="card-header">Grafik Kota</div>
-          <div class="card-body">
-            <echarts-program-keahlian-kota></echarts-program-keahlian-kota>
-          </div><!-- /.card-body -->
-        </div><!-- /.card -->
-      </div>
-      <div class="col-md-6">
-        <div class="card mb-3">
-          <div class="card-header">Grafik Tahunan</div>
-          <div class="card-body">
-            <echarts-program-keahlian-tahun></echarts-program-keahlian-tahun>
-          </div><!-- /.card-body -->
-        </div><!-- /.card -->
-      </div>
+      <ul class="nav nav-pills card-header-pills pull-right">
+        <li class="nav-item">
+          <button class="btn btn-primary btn-sm" role="button" @click="back">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+          </button>
+        </li>
+      </ul>
     </div>
 
+    <div class="card-body">
+      <vue-form class="form-horizontal form-validation" :state="state" @submit.prevent="onSubmit">
+        <div class="form-row">
+          <div class="col-md">
+            <b>Label :</b> {{ model.label }}
+          </div>
+        </div>
+
+        <div class="form-row mt-4">
+          <div class="col-md">
+            <b>Description :</b> {{ model.description }}
+          </div>
+        </div>
+
+        
+        
+      </vue-form>
+    </div>
   </div>
 </template>
+
+<script>
+export default {
+  mounted() {
+    axios.get('api/program-keahlian/' + this.$route.params.id)
+      .then(response => {
+        if (response.data.status == true) {
+          this.model.label = response.data.program_keahlian.label;
+          this.model.description = response.data.program_keahlian.description;
+        } else {
+          alert('Failed');
+        }
+      })
+      .catch(function(response) {
+        alert('Break');
+        window.location.href = '#/admin/program-keahlian';
+      })
+
+  },
+  data() {
+    return {
+      state: {},
+      model: {
+        label: "",
+        description: "",
+        pendaftaran: "",
+      },
+      pendaftaran: []
+    }
+  },
+  methods: {
+    reset() {
+      axios.get('api/siswa/' + this.$route.params.id + '/edit')
+        .then(response => {
+          if (response.data.status == true) {
+            this.model.label = response.data.siswa.label;
+            this.model.description = response.data.siswa.description;
+          } else {
+            alert('Failed');
+          }
+        })
+        .catch(function(response) {
+          alert('Break ');
+        });
+    },
+    back() {
+      window.location = '#/admin/program-keahlian';
+    }
+  }
+}
+</script>
