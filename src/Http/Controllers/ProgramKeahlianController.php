@@ -92,7 +92,7 @@ class ProgramKeahlianController extends Controller
 
         $validator = Validator::make($request->all(), [
             'label'         => 'required|max:16|unique:program_keahlians,label,NULL,id,deleted_at,NULL',
-            'description'   => 'required|max:255',
+            'description'   => 'required|max:255',  
         ]);
 
         if($validator->fails()){
@@ -123,7 +123,7 @@ class ProgramKeahlianController extends Controller
         $program_keahlian = $this->program_keahlian->findOrFail($id);
 
         $response['program_keahlian'] = $program_keahlian;
-        $response['loaded'] = true;
+        $response['status'] = true;
 
         return response()->json($response);
     }
