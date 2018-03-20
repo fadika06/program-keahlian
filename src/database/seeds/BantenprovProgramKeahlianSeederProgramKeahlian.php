@@ -41,8 +41,6 @@ class BantenprovProgramKeahlianSeederProgramKeahlian extends Seeder
             $model = ProgramKeahlian::updateOrCreate(
                 [
                     'label' => $program_keahlian->label,
-                ],
-                [
                     'description' => $program_keahlian->description,
                 ]
             );
