@@ -40,7 +40,7 @@ class BantenprovProgramKeahlianSeederProgramKeahlian extends Seeder
         foreach ($program_keahlians as $program_keahlian) {
             $model = ProgramKeahlian::updateOrCreate(
                 [
-                    'label' => $program_keahlian->label
+                    'label' => $program_keahlian->label,
                     'keterangan' => $program_keahlian->keterangan,
                     'user_id'   => $program_keahlian->user_id,
                 ]
