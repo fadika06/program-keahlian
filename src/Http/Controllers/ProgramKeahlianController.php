@@ -6,6 +6,7 @@ namespace Bantenprov\ProgramKeahlian\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Bantenprov\ProgramKeahlian\Facades\ProgramKeahlianFacade;
+use App\User;
 
 /* Models */
 use Bantenprov\ProgramKeahlian\Models\Bantenprov\ProgramKeahlian\ProgramKeahlian;
@@ -26,9 +27,11 @@ class ProgramKeahlianController extends Controller
      *
      * @return void
      */
-    public function __construct(ProgramKeahlian $program_keahlian)
+    protected $user;
+    public function __construct(ProgramKeahlian $program_keahlian, User $user)
     {
         $this->program_keahlian = $program_keahlian;
+        $this->user             = $user;
     }
 
     /**
@@ -50,13 +53,17 @@ class ProgramKeahlianController extends Controller
             $query->where(function($q) use($request) {
                 $value = "%{$request->filter}%";
                 $q->where('label', 'like', $value)
-                    ->orWhere('description', 'like', $value);
+                    ->orWhere('keterangan', 'like', $value);
             });
         }
+
 
         $perPage = $request->has('per_page') ? (int) $request->per_page : null;
         $response = $query->paginate($perPage);
 
+        foreach($response as $user){
+            array_set($response->data, 'user', $user->user->name);
+        }
         return response()->json($response)
             ->header('Access-Control-Allow-Origin', '*')
             ->header('Access-Control-Allow-Methods', 'GET');
@@ -69,12 +76,13 @@ class ProgramKeahlianController extends Controller
      */
     public function create()
     {
-        $program_keahlian              = $this->program_keahlian;
-        $program_keahlian->id          = null;
-        $program_keahlian->label       = null;
-        $program_keahlian->description = null;
+        $users                     = $this->user->all();
 
-        $response['program_keahlian'] = $program_keahlian;
+        foreach($users as $user){
+            array_set($user, 'label', $user->name);
+        }
+
+        $response['user'] = $users;
         $response['loaded'] = true;
 
         return response()->json($response);
@@ -91,20 +99,32 @@ class ProgramKeahlianController extends Controller
         $program_keahlian = $this->program_keahlian;
 
         $validator = Validator::make($request->all(), [
-            'label'         => 'required|max:16|unique:program_keahlians,label,NULL,id,deleted_at,NULL',
-            'description'   => 'required|max:255',  
+            'label'             => 'required',
+            'keterangan'        => 'required',
+            'user_id'           => 'required|unique:sekolahs,user_id',
         ]);
 
         if($validator->fails()){
-            $response['error']  = true;
-            $response['message'] = $validator->errors()->first();
-        } else {
-            $program_keahlian->label       = $request->label;
-            $program_keahlian->description = $request->description;
-            $program_keahlian->save();
+            $check = $program_keahlian->where('user_id',$request->user_id)->whereNull('deleted_at')->count();
 
-            $response['error'] = false;
-            $response['message'] = 'Success';
+            if ($check > 0) {
+                $response['message'] = 'Failed' . $request->user_id . ' already exists';
+
+            } else {
+                $program_keahlian->label             = $request->input('label');
+                $program_keahlian->keterangan        = $request->input('keterangan');
+                $program_keahlian->user_id           = $request->input('user_id');
+                $program_keahlian->save();
+
+                $response['message'] = 'success';
+            }
+        } else {
+                $program_keahlian->label             = $request->input('label');
+                $program_keahlian->keterangan        = $request->input('keterangan');
+                $program_keahlian->user_id           = $request->input('user_id');
+                $program_keahlian->save();
+
+            $response['message'] = 'success';
         }
 
         $response['loaded'] = true;
@@ -122,8 +142,10 @@ class ProgramKeahlianController extends Controller
     {
         $program_keahlian = $this->program_keahlian->findOrFail($id);
 
-        $response['program_keahlian'] = $program_keahlian;
-        $response['status'] = true;
+        array_set($program_keahlian, 'user', $program_keahlian->user->name);
+
+        $response['program_keahlian']   = $program_keahlian;
+        $response['status']             = true;
 
         return response()->json($response);
     }
@@ -138,8 +160,11 @@ class ProgramKeahlianController extends Controller
     {
         $program_keahlian = $this->program_keahlian->findOrFail($id);
 
-        $response['program_keahlian'] = $program_keahlian;
-        $response['loaded'] = true;
+        array_set($program_keahlian->user, 'label', $program_keahlian->user->name);
+
+        $response['program_keahlian']   = $program_keahlian;
+        $response['user']               = $program_keahlian->user;
+        $response['loaded']             = true;
 
         return response()->json($response);
     }
@@ -155,21 +180,42 @@ class ProgramKeahlianController extends Controller
     {
         $program_keahlian = $this->program_keahlian->findOrFail($id);
 
-        $validator = Validator::make($request->all(), [
-            'label'         => 'required|max:16|unique:program_keahlians,label,'.$id.',id,deleted_at,NULL',
-            'description'   => 'required|max:255',
-        ]);
+        if ($request->input('old_user_id') == $request->input('user_id'))  
+        {
+            $validator = Validator::make($request->all(), [
+                'label'               => 'required',
+                'user_id'             => 'required',
+                'keterangan'          => 'required',
 
-        if($validator->fails()){
-            $response['error']  = true;
-            $response['message'] = $validator->errors()->first();
+            ]);
         } else {
-            $program_keahlian->label       = $request->label;
-            $program_keahlian->description = $request->description;
-            $program_keahlian->save();
+            $validator = Validator::make($request->all(), [
+                'label'             => 'required',
+                'keterangan'        => 'required',
+                'user_id'           => 'required|unique:program_keahlians,user_id',
+            ]);
+        }
 
-            $response['error'] = false;
-            $response['message'] = 'Success';
+        if ($validator->fails()) {
+            $check = $program_keahlian->where('user_id',$request->user_id)->whereNull('deleted_at')->count();
+
+            if ($check > 0) {
+                $response['message'] = 'Failed,Username ' . $request->user_id . ' already exists';
+            } else {
+                $program_keahlian->label                 = $request->input('label');
+                $program_keahlian->user_id               = $request->input('user_id');
+                $program_keahlian->keterangan            = $request->input('keterangan');
+                $program_keahlian->save();
+
+                $response['message'] = 'success';
+            }
+        } else {
+                $program_keahlian->label                 = $request->input('label');
+                $program_keahlian->user_id               = $request->input('user_id');
+                $program_keahlian->keterangan            = $request->input('keterangan');
+                $program_keahlian->save();
+
+            $response['message'] = 'success';
         }
 
         $response['loaded'] = true;
