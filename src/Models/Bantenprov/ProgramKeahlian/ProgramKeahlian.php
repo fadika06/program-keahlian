@@ -17,6 +17,19 @@ class ProgramKeahlian extends Model
     ];
     protected $fillable = [
         'label',
-        'description',
+        'keterangan',
+        'user_id',
     ];
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [];
+
+        public function user()
+    {
+        return $this->belongsTo('App\User','user_id');
+    }
+
 }

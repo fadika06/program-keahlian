@@ -28,14 +28,28 @@
 
         <validate tag="div">
           <div class="form-group">
-            <label for="model-description">Description</label>
-            <input type="text" class="form-control" id="model-description" v-model="model.description" name="description" placeholder="Description" required>
-            <field-messages name="description" show="$invalid && $submitted" class="text-danger">
+            <label for="keterangan">Keterangan</label>
+            <input type="text" class="form-control" id="model-description" v-model="model.keterangan" name="keterangan" placeholder="keterangan" required>
+            <field-messages name="keterangan" show="$invalid && $submitted" class="text-danger">
               <small class="form-text text-success">Looks good!</small>
               <small class="form-text text-danger" slot="required">This field is a required field</small>
             </field-messages>
           </div>
         </validate>
+
+        <div class="form-row mt-4">
+          <div class="col-md">
+            <validate tag="div">
+            <label for="user_id">Username</label>
+            <v-select name="user_id" v-model="model.user" :options="user" class="mb-4"></v-select>
+
+            <field-messages name="user_id" show="$invalid && $submitted" class="text-danger">
+              <small class="form-text text-success">Looks good!</small>
+              <small class="form-text text-danger" slot="required">Username is a required field</small>
+            </field-messages>
+            </validate>
+          </div>
+        </div>
 
         <div class="form-group">
           <button type="submit" class="btn btn-primary">Submit</button>
@@ -55,16 +69,22 @@ export default {
       title: 'Add Program Keahlian',
       model: {
         label       : '',
-        description : ''
-      }
+        keterangan  : '',
+        user        : '',
+      },
+      user: []
     }
   },
   mounted() {
     axios.get('api/program-keahlian/create')
       .then(response => {
+        response.data.user.forEach(element => {
+          this.user.push(element);
+        });
         if (response.data.loaded == true) {
-          this.model.label        = response.data.program_keahlian.label;
-          this.model.description  = response.data.program_keahlian.description;
+          this.model.label        = response.data.label;
+          this.model.keterangan   = response.data.keterangan;
+          this.model.user         = response.data.user.id;
         } else {
           alert('Failed');
         }
@@ -83,22 +103,23 @@ export default {
       } else {
         axios.post('api/program-keahlian', {
             label       : this.model.label,
-            description : this.model.description
+            keterangan  : this.model.keterangan,
+            user_id     : this.model.user.id
           })
           .then(response => {
             if (response.data.loaded == true) {
-              if(response.data.error == false){
+              if(response.data.message == 'success'){
                 alert(response.data.message);
                 app.back();
               }else{
                 alert(response.data.message);
               }
             } else {
-              alert('Failed');
+              alert(response.data.message);
             }
           })
           .catch(function(response) {
-            alert('Break');
+            alert('Break ' + response.data.message);
           });
       }
     },
@@ -106,8 +127,8 @@ export default {
       axios.get('api/program-keahlian/create')
         .then(response => {
           if (response.data.loaded == true) {
-            this.model.label        = response.data.program_keahlian.label;
-            this.model.description  = response.data.program_keahlian.description;
+            this.model.label        = response.data.label;
+            this.model.keterangan   = response.data.keterangan;
           } else {
             alert('Failed');
           }

@@ -14,37 +14,38 @@ class BantenprovProgramKeahlianSeederProgramKeahlian extends Seeder
      *
      * @return void
      */
-	public function run()
-	{
+    public function run()
+    {
         Model::unguard();
 
         $program_keahlians = (object) [
             (object) [
-                'label' => 'G2G',
-                'description' => 'Goverment to Goverment',
+                'user_id'       => '1',
+                'label'         => 'label1',
+                'keterangan'    => 'keterangan 1'
             ],
             (object) [
-                'label' => 'G2E',
-                'description' => 'Goverment to Employee',
+                'user_id'       => '2',
+                'label'         => 'label2',
+                'keterangan'    => 'keterangan2'
             ],
             (object) [
-                'label' => 'G2C',
-                'description' => 'Goverment to Citizen',
+                'user_id'       => '3',
+                'label'         => 'label3',
+                'keterangan'    => 'keterangan3'
             ],
-            (object) [
-                'label' => 'G2B',
-                'description' => 'Goverment to Business',
-            ],
+            
         ];
 
         foreach ($program_keahlians as $program_keahlian) {
             $model = ProgramKeahlian::updateOrCreate(
                 [
                     'label' => $program_keahlian->label,
-                    'description' => $program_keahlian->description,
+                    'keterangan' => $program_keahlian->keterangan,
+                    'user_id'   => $program_keahlian->user_id,
                 ]
             );
             $model->save();
         }
-	}
+    }
 }
