@@ -14,8 +14,9 @@ class CreateProgramKeahliansTable extends Migration
 	{
 		Schema::create('program_keahlians', function(Blueprint $table) {
 			$table->increments('id');
-			$table->string('label', 255);
-			$table->string('description', 255)->nullable();
+			$table->string('label');
+			$table->string('keterangan');
+			$table->integer('user_id');
 			$table->timestamps();
 			$table->softDeletes();
 		});

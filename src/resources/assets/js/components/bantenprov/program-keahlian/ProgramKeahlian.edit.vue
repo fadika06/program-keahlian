@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-header">
-      <i class="fa fa-table" aria-hidden="true"></i> {{ title }}
+      <i class="fa fa-table" aria-hidden="true"></i> Edit Program Keahlian
 
       <ul class="nav nav-pills card-header-pills pull-right">
         <li class="nav-item">
@@ -13,12 +13,12 @@
     </div>
 
     <div class="card-body">
-      <vue-form :state="state" @submit.prevent="onSubmit">
+       <vue-form class="form-horizontal form-validation" :state="state" @submit.prevent="onSubmit">
 
         <validate tag="div">
           <div class="form-group">
-            <label for="model-label">Label</label>
-            <input type="text" class="form-control" id="model-label" v-model="model.label" name="label" placeholder="Label" required autofocus>
+            <label for="label">Label</label>
+            <input type="text" class="form-control" id="label" v-model="model.label" name="label" placeholder="Label" required autofocus>
             <field-messages name="label" show="$invalid && $submitted" class="text-danger">
               <small class="form-text text-success">Looks good!</small>
               <small class="form-text text-danger" slot="required">This field is a required field</small>
@@ -28,14 +28,28 @@
 
         <validate tag="div">
           <div class="form-group">
-            <label for="model-description">Description</label>
-            <input type="text" class="form-control" id="model-description" v-model="model.description" name="description" placeholder="Description" required>
-            <field-messages name="description" show="$invalid && $submitted" class="text-danger">
+            <label for="keterangan">Keterangan</label>
+            <input type="text" class="form-control" id="keterangan" v-model="model.keterangan" name="keterangan" placeholder="keterangan" required>
+            <field-messages name="keterangan" show="$invalid && $submitted" class="text-danger">
               <small class="form-text text-success">Looks good!</small>
               <small class="form-text text-danger" slot="required">This field is a required field</small>
             </field-messages>
           </div>
         </validate>
+
+        <div class="form-row mt-4">
+          <div class="col-md">
+            <validate tag="div">
+            <label for="user_id">Username</label>
+            <v-select name="user_id" v-model="model.user" :options="user" class="mb-4"></v-select>
+
+            <field-messages name="user_id" show="$invalid && $submitted" class="text-danger">
+              <small class="form-text text-success">Looks good!</small>
+              <small class="form-text text-danger" slot="required">Username is a required field</small>
+            </field-messages>
+            </validate>
+          </div>
+        </div>
 
         <div class="form-group">
           <button type="submit" class="btn btn-primary">Submit</button>
@@ -49,22 +63,18 @@
 
 <script>
 export default {
-  data() {
-    return {
-      state: {},
-      title: 'Edit Program Keahlian',
-      model: {
-        label       : '',
-        description : ''
-      }
-    }
-  },
   mounted() {
     axios.get('api/program-keahlian/' + this.$route.params.id + '/edit')
       .then(response => {
         if (response.data.loaded == true) {
-          this.model.label        = response.data.program_keahlian.label;
-          this.model.description  = response.data.program_keahlian.description;
+
+          this.model.keterangan     = response.data.program_keahlian.keterangan;
+          this.model.label          = response.data.program_keahlian.label;
+          this.model.old_user_id    = response.data.program_keahlian.user_id;
+          this.model.user           = response.data.user;
+          this.model.old_user       = response.data.program_keahlian.user;
+          
+
         } else {
           alert('Failed');
         }
@@ -73,6 +83,29 @@ export default {
         alert('Break');
         window.location.href = '#/admin/program-keahlian';
       });
+
+      axios.get('api/program-keahlian/create')
+      .then(response => {           
+          response.data.user.forEach(element => {
+            this.user.push(element);
+          });
+
+      })
+      .catch(function(response) {
+        alert('Break');
+      })
+  },
+  data() {
+    return {
+      state: {},
+      model: {
+        keterangan:          "",
+        label:               "",
+        user:                "",
+        
+      },
+      user: []
+    }
   },
   methods: {
     onSubmit: function() {
@@ -82,23 +115,25 @@ export default {
         return;
       } else {
         axios.put('api/program-keahlian/' + this.$route.params.id, {
-            label       : this.model.label,
-            description : this.model.description
+            user_id:            this.model.user.id,
+            old_user_id:        this.model.old_user_id,
+            keterangan:         this.model.keterangan,
+            label:              this.model.label,
           })
           .then(response => {
             if (response.data.loaded == true) {
-              if(response.data.error == false){
+              if(response.data.message == 'success'){
                 alert(response.data.message);
                 app.back();
               }else{
                 alert(response.data.message);
               }
             } else {
-              alert('Failed');
+              alert(response.data.message);
             }
           })
           .catch(function(response) {
-            alert('Break');
+            alert('Break ' + response.data.message);
           });
       }
     },
@@ -106,15 +141,15 @@ export default {
       axios.get('api/program-keahlian/' + this.$route.params.id + '/edit')
         .then(response => {
           if (response.data.loaded == true) {
-            this.model.label        = response.data.program_keahlian.label;
-            this.model.description  = response.data.program_keahlian.description;
+            this.model.user           = response.data.program_keahlian.user;
+            this.model.keterangan     = response.data.program_keahlian.keterangan;
+            this.model.label          = response.data.program_keahlian.label;
           } else {
             alert('Failed');
           }
         })
         .catch(function(response) {
-          alert('Break');
-          window.location.href = '#/admin/program-keahlian';
+          alert('Break ');
         });
     },
     back() {
