@@ -44,9 +44,9 @@ class ProgramKeahlianController extends Controller
         if ($request->has('sort')) {
             list($sortCol, $sortDir) = explode('|', $request->sort);
 
-            $query = $this->program_keahlian->orderBy($sortCol, $sortDir);
+            $query = $this->program_keahlian->with('user')->orderBy($sortCol, $sortDir);
         } else {
-            $query = $this->program_keahlian->orderBy('id', 'asc');
+            $query = $this->program_keahlian->with('user')->orderBy('id', 'asc');
         }
 
         if ($request->exists('filter')) {
@@ -60,10 +60,7 @@ class ProgramKeahlianController extends Controller
 
         $perPage = $request->has('per_page') ? (int) $request->per_page : null;
         $response = $query->paginate($perPage);
-
-        foreach($response as $user){
-            array_set($response->data, 'user', $user->user->name);
-        }
+        
         return response()->json($response)
             ->header('Access-Control-Allow-Origin', '*')
             ->header('Access-Control-Allow-Methods', 'GET');
