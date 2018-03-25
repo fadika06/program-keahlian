@@ -92,12 +92,6 @@ export default {
           dataClass: 'right aligned'
         },
         {
-          name: 'user.name',
-          title: 'Username',
-          sortField: 'user_id',
-          titleClass: 'center aligned'
-        },
-        {
           name: 'label',
           title: 'Label',
           sortField: 'label',
@@ -107,6 +101,12 @@ export default {
           name: 'keterangan',
           title: 'Keterangan',
           sortField: 'keterangan',
+          titleClass: 'center aligned'
+        },
+        {
+          name: 'user.name',
+          title: 'Username',
+          sortField: 'user_id',
           titleClass: 'center aligned'
         },
         {
