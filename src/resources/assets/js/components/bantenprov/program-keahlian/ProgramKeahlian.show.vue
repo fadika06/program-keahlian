@@ -36,8 +36,8 @@
             <b>Username :</b> {{ model.user.name }}
           </div>
           <div class="col-md">
-            <div class="col-md-6">Dibuat : {{ model.created_at }}</div>
-            <div class="col-md-6 text-right">Diperbaiki : {{ model.updated_at }}</div>
+            <div class="col-md text-right">Dibuat : {{ model.created_at }}</div>
+            <div class="col-md text-right">Diperbaiki : {{ model.updated_at }}</div>
           </div>
         </div>
       </div>
