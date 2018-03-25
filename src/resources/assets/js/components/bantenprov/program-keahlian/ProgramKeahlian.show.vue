@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-header">
-      <i class="fa fa-table" aria-hidden="true"></i> Show Program keahlian {{ model.label }}
+      <i class="fa fa-table" aria-hidden="true"></i>Program keahlian {{ model.label }}
 
       <ul class="nav nav-pills card-header-pills pull-right">
         <li class="nav-item">
@@ -31,11 +31,15 @@
             <b>Username :</b> {{ model.user.name }}
           </div>
         </div>
-
-        
-        
       </vue-form>
     </div>
+    <div class="card-footer text-muted">
+        <div class="row">
+          <div class="col-md-6">Dibuat : {{ model.created_at }}</div>
+          <div class="col-md-6 text-right">Diperbaiki : {{ model.updated_at }}</div>
+        </div>
+          
+      </div>
   </div>
 </template>
 
@@ -48,7 +52,8 @@ export default {
           this.model.label          = response.data.program_keahlian.label;
           this.model.user           = response.data.program_keahlian.user;
           this.model.keterangan     = response.data.program_keahlian.keterangan;
-  
+          this.model.created_at     = response.data.program_keahlian.created_at;
+          this.model.updated_at     = response.data.program_keahlian.updated_at;
 
         } 
         else {
@@ -77,6 +82,8 @@ export default {
         user_id:          "",
         keterangan:       "",
         label:            "",
+        created_at:       "",
+        updated_at:       "",
     
       },
       user: []
