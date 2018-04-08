@@ -78,20 +78,23 @@ export default {
   mounted() {
     axios.get('api/program-keahlian/create')
       .then(response => {
-        response.data.user.forEach(element => {
-          this.user.push(element);
-        });
         if (response.data.status == true) {
-          this.model.label        = response.data.label;
-          this.model.keterangan   = response.data.keterangan;
-          this.model.user         = response.data.user.id;
+          this.model.user = response.data.current_user;
+
+          if(response.data.user_special == true){
+            response.data.user.forEach(user_element => {
+              this.user.push(user_element);
+            });
+          }else{
+            this.user.push(response.data.user);
+          }
         } else {
           alert('Failed');
         }
       })
       .catch(function(response) {
         alert('Break');
-        window.location.href = '#/admin/program-keahlian';
+        window.location = '#/admin/program-keahlian';
       });
   },
   methods: {

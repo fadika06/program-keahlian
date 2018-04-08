@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-header">
-      <i class="fa fa-table" aria-hidden="true"></i>Program keahlian {{ model.label }}
+      <i class="fa fa-table" aria-hidden="true"></i> Program keahlian {{ model.label }}
 
       <ul class="nav nav-pills card-header-pills pull-right">
         <li class="nav-item">
@@ -56,7 +56,7 @@ export default {
           this.model.created_at     = response.data.program_keahlian.created_at;
           this.model.updated_at     = response.data.program_keahlian.updated_at;
 
-        } 
+        }
         else {
           alert('Failed');
         }
@@ -66,13 +66,18 @@ export default {
         window.location.href = '#/admin/program-keahlian';
       }),
       axios.get('api/program-keahlian/create')
-      .then(response => {           
-          response.data.user.forEach(element => {
-            this.user.push(element);
-          });
+      .then(response => {
+          if(response.data.user_special == true){
+            response.data.user.forEach(user_element => {
+              this.user.push(user_element);
+            });
+          }else{
+            this.user.push(response.data.user);
+          }
       })
       .catch(function(response) {
         alert('Break');
+        window.location.href = '#/admin/program-keahlian';
       })
 
   },
@@ -85,7 +90,7 @@ export default {
         label:            "",
         created_at:       "",
         updated_at:       "",
-    
+
       },
       user: []
     }
