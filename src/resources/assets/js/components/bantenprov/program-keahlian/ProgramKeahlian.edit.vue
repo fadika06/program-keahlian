@@ -66,14 +66,14 @@ export default {
   mounted() {
     axios.get('api/program-keahlian/' + this.$route.params.id + '/edit')
       .then(response => {
-        if (response.data.loaded == true) {
+        if (response.data.status == true) {
 
           this.model.keterangan     = response.data.program_keahlian.keterangan;
           this.model.label          = response.data.program_keahlian.label;
           this.model.old_user_id    = response.data.program_keahlian.user_id;
           this.model.user           = response.data.user;
           this.model.old_user       = response.data.program_keahlian.user;
-          
+
 
         } else {
           alert('Failed');
@@ -85,14 +85,18 @@ export default {
       });
 
       axios.get('api/program-keahlian/create')
-      .then(response => {           
-          response.data.user.forEach(element => {
-            this.user.push(element);
-          });
-
+      .then(response => {
+          if(response.data.user_special == true){
+            response.data.user.forEach(user_element => {
+              this.user.push(user_element);
+            });
+          }else{
+            this.user.push(response.data.user);
+          }
       })
       .catch(function(response) {
         alert('Break');
+        window.location.href = '#/admin/program-keahlian';
       })
   },
   data() {
@@ -102,7 +106,7 @@ export default {
         keterangan:          "",
         label:               "",
         user:                "",
-        
+
       },
       user: []
     }
@@ -121,7 +125,7 @@ export default {
             label:              this.model.label,
           })
           .then(response => {
-            if (response.data.loaded == true) {
+            if (response.data.status == true) {
               if(response.data.message == 'success'){
                 alert(response.data.message);
                 app.back();
@@ -140,7 +144,7 @@ export default {
     reset() {
       axios.get('api/program-keahlian/' + this.$route.params.id + '/edit')
         .then(response => {
-          if (response.data.loaded == true) {
+          if (response.data.status == true) {
             this.model.user           = response.data.program_keahlian.user;
             this.model.keterangan     = response.data.program_keahlian.keterangan;
             this.model.label          = response.data.program_keahlian.label;
