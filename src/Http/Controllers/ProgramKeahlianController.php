@@ -60,7 +60,7 @@ class ProgramKeahlianController extends Controller
 
         $perPage = $request->has('per_page') ? (int) $request->per_page : null;
         $response = $query->paginate($perPage);
-        
+
         return response()->json($response)
             ->header('Access-Control-Allow-Origin', '*')
             ->header('Access-Control-Allow-Methods', 'GET');
@@ -80,7 +80,7 @@ class ProgramKeahlianController extends Controller
         }
 
         $response['user'] = $users;
-        $response['loaded'] = true;
+        $response['status'] = true;
 
         return response()->json($response);
     }
@@ -124,7 +124,7 @@ class ProgramKeahlianController extends Controller
             $response['message'] = 'success';
         }
 
-        $response['loaded'] = true;
+        $response['status'] = true;
 
         return response()->json($response);
     }
@@ -161,7 +161,7 @@ class ProgramKeahlianController extends Controller
 
         $response['program_keahlian']   = $program_keahlian;
         $response['user']               = $program_keahlian->user;
-        $response['loaded']             = true;
+        $response['status']             = true;
 
         return response()->json($response);
     }
@@ -177,7 +177,7 @@ class ProgramKeahlianController extends Controller
     {
         $program_keahlian = $this->program_keahlian->findOrFail($id);
 
-        if ($request->input('old_user_id') == $request->input('user_id'))  
+        if ($request->input('old_user_id') == $request->input('user_id'))
         {
             $validator = Validator::make($request->all(), [
                 'label'               => 'required',
@@ -215,7 +215,7 @@ class ProgramKeahlianController extends Controller
             $response['message'] = 'success';
         }
 
-        $response['loaded'] = true;
+        $response['status'] = true;
 
         return response()->json($response);
     }
@@ -231,9 +231,9 @@ class ProgramKeahlianController extends Controller
         $program_keahlian = $this->program_keahlian->findOrFail($id);
 
         if ($program_keahlian->delete()) {
-            $response['loaded'] = true;
+            $response['status'] = true;
         } else {
-            $response['loaded'] = false;
+            $response['status'] = false;
         }
 
         return json_encode($response);

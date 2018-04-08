@@ -81,7 +81,7 @@ export default {
         response.data.user.forEach(element => {
           this.user.push(element);
         });
-        if (response.data.loaded == true) {
+        if (response.data.status == true) {
           this.model.label        = response.data.label;
           this.model.keterangan   = response.data.keterangan;
           this.model.user         = response.data.user.id;
@@ -107,7 +107,7 @@ export default {
             user_id     : this.model.user.id
           })
           .then(response => {
-            if (response.data.loaded == true) {
+            if (response.data.status == true) {
               if(response.data.message == 'success'){
                 alert(response.data.message);
                 app.back();
@@ -126,7 +126,7 @@ export default {
     reset() {
       axios.get('api/program-keahlian/create')
         .then(response => {
-          if (response.data.loaded == true) {
+          if (response.data.status == true) {
             this.model.label        = response.data.label;
             this.model.keterangan   = response.data.keterangan;
           } else {
