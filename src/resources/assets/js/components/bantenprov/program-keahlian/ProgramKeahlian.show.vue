@@ -20,6 +20,7 @@
           </div>
         </div>
 
+
         <div class="form-row mt-4">
           <div class="col-md">
             <b>Keterangan :</b> {{ model.keterangan }}
@@ -64,20 +65,6 @@ export default {
       .catch(function(response) {
         alert('Break');
         window.location.href = '#/admin/program-keahlian';
-      }),
-      axios.get('api/program-keahlian/create')
-      .then(response => {
-          if(response.data.user_special == true){
-            response.data.user.forEach(user_element => {
-              this.user.push(user_element);
-            });
-          }else{
-            this.user.push(response.data.user);
-          }
-      })
-      .catch(function(response) {
-        alert('Break');
-        window.location.href = '#/admin/program-keahlian';
       })
 
   },
@@ -85,7 +72,7 @@ export default {
     return {
       state: {},
       model: {
-        user_id:          "",
+        user:          "",
         keterangan:       "",
         label:            "",
         created_at:       "",
@@ -96,48 +83,6 @@ export default {
     }
   },
   methods: {
-    onSubmit: function() {
-      let app = this;
-
-      if (this.state.$invalid) {
-        return;
-      } else {
-        axios.put('api/program-keahlian/' + this.$route.params.id, {
-            user_id:      this.model.user_id,
-            keterangan:   this.model.keterangan,
-            label:  this.model.label,
-          })
-          .then(response => {
-            if (response.data.status == true) {
-              if(response.data.message == 'success'){
-                alert(response.data.message);
-                app.back();
-              }else{
-                alert(response.data.message);
-              }
-            } else {
-              alert(response.data.message);
-            }
-          })
-          .catch(function(response) {
-            alert('Break ' + response.data.message);
-          });
-      }
-    },
-    reset() {
-      axios.get('api/program-keahlian/' + this.$route.params.id + '/edit')
-        .then(response => {
-          if (response.data.status == true) {
-            this.model.label = response.data.sekolah.label;
-            this.model.description = response.data.sekolah.description;
-          } else {
-            alert('Failed');
-          }
-        })
-        .catch(function(response) {
-          alert('Break ');
-        });
-    },
     back() {
       window.location = '#/admin/program-keahlian';
     }
