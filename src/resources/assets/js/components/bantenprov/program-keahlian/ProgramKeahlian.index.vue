@@ -159,7 +159,7 @@ export default {
       if (confirm('Do you really want to delete it?')) {
         axios.delete('/api/program-keahlian/' + rowData.id)
           .then(function(response) {
-            if (response.data.loaded == true) {
+            if (response.data.status == true) {
               app.$refs.vuetable.reload()
             } else {
               alert('Failed');

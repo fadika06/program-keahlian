@@ -60,7 +60,7 @@ class ProgramKeahlianController extends Controller
 
         $perPage = $request->has('per_page') ? (int) $request->per_page : null;
         $response = $query->paginate($perPage);
-        
+
         return response()->json($response)
             ->header('Access-Control-Allow-Origin', '*')
             ->header('Access-Control-Allow-Methods', 'GET');
@@ -73,14 +73,30 @@ class ProgramKeahlianController extends Controller
      */
     public function create()
     {
-        $users                     = $this->user->all();
+        $response = [];
 
-        foreach($users as $user){
-            array_set($user, 'label', $user->name);
+        $users_special = $this->user->all();
+        $users_standar = $this->user->find(\Auth::User()->id);
+        $current_user = \Auth::User();
+
+        $role_check = \Auth::User()->hasRole(['superadministrator','administrator']);
+
+        if($role_check){
+            $response['user_special'] = true;
+            foreach($users_special as $user){
+                array_set($user, 'label', $user->name);
+            }
+            $response['user'] = $users_special;
+        }else{
+            $response['user_special'] = false;
+            array_set($users_standar, 'label', $users_standar->name);
+            $response['user'] = $users_standar;
         }
 
-        $response['user'] = $users;
-        $response['loaded'] = true;
+        array_set($current_user, 'label', $current_user->name);
+
+        $response['current_user'] = $current_user;
+        $response['status'] = true;
 
         return response()->json($response);
     }
@@ -124,7 +140,7 @@ class ProgramKeahlianController extends Controller
             $response['message'] = 'success';
         }
 
-        $response['loaded'] = true;
+        $response['status'] = true;
 
         return response()->json($response);
     }
@@ -161,7 +177,7 @@ class ProgramKeahlianController extends Controller
 
         $response['program_keahlian']   = $program_keahlian;
         $response['user']               = $program_keahlian->user;
-        $response['loaded']             = true;
+        $response['status']             = true;
 
         return response()->json($response);
     }
@@ -177,7 +193,7 @@ class ProgramKeahlianController extends Controller
     {
         $program_keahlian = $this->program_keahlian->findOrFail($id);
 
-        if ($request->input('old_user_id') == $request->input('user_id'))  
+        if ($request->input('old_user_id') == $request->input('user_id'))
         {
             $validator = Validator::make($request->all(), [
                 'label'               => 'required',
@@ -215,7 +231,7 @@ class ProgramKeahlianController extends Controller
             $response['message'] = 'success';
         }
 
-        $response['loaded'] = true;
+        $response['status'] = true;
 
         return response()->json($response);
     }
@@ -231,9 +247,9 @@ class ProgramKeahlianController extends Controller
         $program_keahlian = $this->program_keahlian->findOrFail($id);
 
         if ($program_keahlian->delete()) {
-            $response['loaded'] = true;
+            $response['status'] = true;
         } else {
-            $response['loaded'] = false;
+            $response['status'] = false;
         }
 
         return json_encode($response);
