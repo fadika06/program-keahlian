@@ -10,153 +10,78 @@
 [![Monthly Downloads](https://poser.pugx.org/bantenprov/program-keahlian/d/monthly)](https://packagist.org/packages/bantenprov/program-keahlian)
 [![Daily Downloads](https://poser.pugx.org/bantenprov/program-keahlian/d/daily)](https://packagist.org/packages/bantenprov/program-keahlian)
 
-Program Keahlian pada sekolah
-
-- Teknik Elektronika Industri
-- Teknik Instalasi Tenaga Listrik
-- Teknik Pendingin dan Tata Udara
-- Teknik Komputer dan Jaringan
-- Multi Media
+Program Keahlian
 
 ### Install via composer
 
 - Development snapshot
 
 ```bash
-$ composer require bantenprov/program-keahlian:dev-master
+composer require bantenprov/program-keahlian:dev-master
 ```
 
 - Latest release:
 
 ```bash
-$ composer require bantenprov/program-keahlian
+composer require bantenprov/program-keahlian
 ```
 
 ### Download via github
 
 ```bash
-$ git clone https://github.com/bantenprov/program-keahlian.git
+git clone https://github.com/bantenprov/program-keahlian.git
+
 ```
 
 #### Edit `config/app.php` :
 
 ```php
 'providers' => [
-
     /*
-     * Package Service Providers...
-     */
-    Laravel\Tinker\TinkerServiceProvider::class,
-    //....
+    * Laravel Framework Service Providers...
+    */
+    Illuminate\Auth\AuthServiceProvider::class,
+    Illuminate\Broadcasting\BroadcastServiceProvider::class,
+    Illuminate\Bus\BusServiceProvider::class,
+    Illuminate\Cache\CacheServiceProvider::class,
+    Illuminate\Foundation\Providers\ConsoleSupportServiceProvider::class,
+    Illuminate\Cookie\CookieServiceProvider::class,
+    //...
     Bantenprov\ProgramKeahlian\ProgramKeahlianServiceProvider::class,
-```
-
-#### Publish vendor :
-
-```bash
-$ php artisan vendor:publish --tag=program-keahlian-seeds
-$ php artisan vendor:publish --tag=program-keahlian-assets
-$ php artisan vendor:publish --tag=program-keahlian-public
-```
-
-#### Lakukan auto dump :
-
-```bash
-$ composer dump-autoload
+    //...
 ```
 
 #### Lakukan migrate :
 
 ```bash
-$ php artisan migrate
+php artisan migrate
+```
+
+#### Lakukan publish semua komponen :
+
+```bash
+php artisan vendor:publish --tag=program-keahlian-publish
+```
+
+#### Lakukan auto dump :
+
+```bash
+composer dump-autoload
 ```
 
 #### Lakukan seeding :
 
+- Seeding semua seeder
+
 ```bash
-$ php artisan db:seed --class=BantenprovProgramKeahlianSeeder
+php artisan db:seed --class=BantenprovProgramKeahlianSeeder
 ```
 
-#### Tambahkan route di dalam file : `resources/assets/js/routes.js` :
+- Seeding secara individual
 
-```javascript
-{
-    path: '/dashboard',
-    redirect: '/dashboard/home',
-    component: layout('Default'),
-    children: [
-        //== ...
-        {
-            path: '/dashboard/program-keahlian',
-            components: {
-                main: resolve => require(['./components/views/bantenprov/program-keahlian/DashboardProgramKeahlian.vue'], resolve),
-                navbar: resolve => require(['./components/Navbar.vue'], resolve),
-                sidebar: resolve => require(['./components/Sidebar.vue'], resolve)
-            },
-            meta: {
-                title: "Program Keahlian"
-            }
-        },
-        //== ...
-    ]
-},
+```bash
 ```
 
-```javascript
-{
-    path: '/admin',
-    redirect: '/admin/dashboard/home',
-    component: layout('Default'),
-    children: [
-        //== ...
-        {
-            path: '/admin/program-keahlian',
-            components: {
-                main: resolve => require(['./components/bantenprov/program-keahlian/ProgramKeahlian.index.vue'], resolve),
-                navbar: resolve => require(['./components/Navbar.vue'], resolve),
-                sidebar: resolve => require(['./components/Sidebar.vue'], resolve)
-            },
-            meta: {
-                title: "Program Keahlian"
-            }
-        },
-        {
-            path: '/admin/program-keahlian/create',
-            components: {
-                main: resolve => require(['./components/bantenprov/program-keahlian/ProgramKeahlian.add.vue'], resolve),
-                navbar: resolve => require(['./components/Navbar.vue'], resolve),
-                sidebar: resolve => require(['./components/Sidebar.vue'], resolve)
-            },
-            meta: {
-                title: "Add Program Keahlian"
-            }
-        },
-        {
-            path: '/admin/program-keahlian/:id',
-            components: {
-                main: resolve => require(['./components/bantenprov/program-keahlian/ProgramKeahlian.show.vue'], resolve),
-                navbar: resolve => require(['./components/Navbar.vue'], resolve),
-                sidebar: resolve => require(['./components/Sidebar.vue'], resolve)
-            },
-            meta: {
-                title: "View Program Keahlian"
-            }
-        },
-        {
-            path: '/admin/program-keahlian/:id/edit',
-            components: {
-                main: resolve => require(['./components/bantenprov/program-keahlian/ProgramKeahlian.edit.vue'], resolve),
-                navbar: resolve => require(['./components/Navbar.vue'], resolve),
-                sidebar: resolve => require(['./components/Sidebar.vue'], resolve)
-            },
-            meta: {
-                title: "Edit Program Keahlian"
-            }
-        },
-        //== ...
-    ]
-},
-```
 #### Edit menu `resources/assets/js/menu.js`
 
 ```javascript
@@ -165,13 +90,14 @@ $ php artisan db:seed --class=BantenprovProgramKeahlianSeeder
     icon: 'fa fa-dashboard',
     childType: 'collapse',
     childItem: [
-        //== ...
+        //...
+        // Program Keahlian
         {
             name: 'Program Keahlian',
             link: '/dashboard/program-keahlian',
             icon: 'fa fa-angle-double-right'
         },
-        //== ...
+        //...
     ]
 },
 ```
@@ -182,13 +108,14 @@ $ php artisan db:seed --class=BantenprovProgramKeahlianSeeder
     icon: 'fa fa-lock',
     childType: 'collapse',
     childItem: [
-        //== ...
+        //...
+        // Program Keahlian
         {
             name: 'Program Keahlian',
             link: '/admin/program-keahlian',
             icon: 'fa fa-angle-double-right'
         },
-        //== ...
+        //...
     ]
 },
 ```
@@ -196,37 +123,124 @@ $ php artisan db:seed --class=BantenprovProgramKeahlianSeeder
 #### Tambahkan components `resources/assets/js/components.js` :
 
 ```javascript
-import ProgramKeahlian from './components/bantenprov/program-keahlian/ProgramKeahlian.chart.vue';
-Vue.component('echarts-program-keahlian', ProgramKeahlian);
+//... Program Keahlian ...//
 
-import ProgramKeahlianKota from './components/bantenprov/program-keahlian/ProgramKeahlianKota.chart.vue';
-Vue.component('echarts-program-keahlian-kota', ProgramKeahlianKota);
+import ProgramKeahlianAdminShow from '~/components/bantenprov/program-keahlian/program-keahlian/ProgramKeahlianAdmin.show.vue';
+Vue.component('program-keahlian-admin', ProgramKeahlianAdminShow);
 
-import ProgramKeahlianTahun from './components/bantenprov/program-keahlian/ProgramKeahlianTahun.chart.vue';
-Vue.component('echarts-program-keahlian-tahun', ProgramKeahlianTahun);
+//... Echarts Program Keahlian ...//
 
-import ProgramKeahlianAdminShow from './components/bantenprov/program-keahlian/ProgramKeahlianAdmin.show.vue';
-Vue.component('admin-view-program-keahlian-tahun', ProgramKeahlianAdminShow);
+import ProgramKeahlian from '~/components/bantenprov/program-keahlian/program-keahlian/ProgramKeahlian.chart.vue';
+Vue.component('program-keahlian-echarts', ProgramKeahlian);
 
-//== Echarts Program Keahlian
+import ProgramKeahlianKota from '~/components/bantenprov/program-keahlian/program-keahlian/ProgramKeahlianKota.chart.vue';
+Vue.component('program-keahlian-echarts-kota', ProgramKeahlianKota);
 
-import ProgramKeahlianBar01 from './components/views/bantenprov/program-keahlian/ProgramKeahlianBar01.vue';
+import ProgramKeahlianTahun from '~/components/bantenprov/program-keahlian/program-keahlian/ProgramKeahlianTahun.chart.vue';
+Vue.component('program-keahlian-echarts-tahun', ProgramKeahlianTahun);
+
+//... Mini Bar Charts Program Keahlian ...//
+
+import ProgramKeahlianBar01 from '~/components/views/bantenprov/program-keahlian/program-keahlian/ProgramKeahlianBar01.vue';
 Vue.component('program-keahlian-bar-01', ProgramKeahlianBar01);
 
-import ProgramKeahlianBar02 from './components/views/bantenprov/program-keahlian/ProgramKeahlianBar02.vue';
+import ProgramKeahlianBar02 from '~/components/views/bantenprov/program-keahlian/program-keahlian/ProgramKeahlianBar02.vue';
 Vue.component('program-keahlian-bar-02', ProgramKeahlianBar02);
 
-//== mini bar charts
-import ProgramKeahlianBar03 from './components/views/bantenprov/program-keahlian/ProgramKeahlianBar03.vue';
+import ProgramKeahlianBar03 from '~/components/views/bantenprov/program-keahlian/program-keahlian/ProgramKeahlianBar03.vue';
 Vue.component('program-keahlian-bar-03', ProgramKeahlianBar03);
 
-import ProgramKeahlianPie01 from './components/views/bantenprov/program-keahlian/ProgramKeahlianPie01.vue';
+//... Mini Pie Charts Program Keahlian ...//
+
+import ProgramKeahlianPie01 from '~/components/views/bantenprov/program-keahlian/program-keahlian/ProgramKeahlianPie01.vue';
 Vue.component('program-keahlian-pie-01', ProgramKeahlianPie01);
 
-import ProgramKeahlianPie02 from './components/views/bantenprov/program-keahlian/ProgramKeahlianPie02.vue';
+import ProgramKeahlianPie02 from '~/components/views/bantenprov/program-keahlian/program-keahlian/ProgramKeahlianPie02.vue';
 Vue.component('program-keahlian-pie-02', ProgramKeahlianPie02);
 
-//== mini pie charts
-import ProgramKeahlianPie03 from './components/views/bantenprov/program-keahlian/ProgramKeahlianPie03.vue';
+import ProgramKeahlianPie03 from '~/components/views/bantenprov/program-keahlian/program-keahlian/ProgramKeahlianPie03.vue';
 Vue.component('program-keahlian-pie-03', ProgramKeahlianPie03);
+```
+
+#### Tambahkan route di dalam file : `resources/assets/js/routes.js` :
+
+```javascript
+{
+    path: '/dashboard',
+    redirect: '/dashboard/home',
+    component: layout('Default'),
+    children: [
+        //...
+        // Program Keahlian
+        {
+            path: '/dashboard/program-keahlian',
+            components: {
+                main: resolve => require(['~/components/views/bantenprov/program-keahlian/program-keahlian/ProgramKeahlianDashboard.vue'], resolve),
+                navbar: resolve => require(['~/components/Navbar.vue'], resolve),
+                sidebar: resolve => require(['~/components/Sidebar.vue'], resolve)
+            },
+            meta: {
+                title: "Program Keahlian"
+            }
+        },
+        //...
+    ]
+},
+```
+
+```javascript
+{
+    path: '/admin',
+    redirect: '/admin/dashboard/home',
+    component: layout('Default'),
+    children: [
+        //...
+        // Program Keahlian
+        {
+            path: '/admin/program-keahlian',
+            components: {
+                main: resolve => require(['~/components/bantenprov/program-keahlian/program-keahlian/ProgramKeahlian.index.vue'], resolve),
+                navbar: resolve => require(['~/components/Navbar.vue'], resolve),
+                sidebar: resolve => require(['~/components/Sidebar.vue'], resolve)
+            },
+            meta: {
+                title: "Program Keahlian"
+            }
+        },
+        {
+            path: '/admin/program-keahlian/create',
+            components: {
+                main: resolve => require(['~/components/bantenprov/program-keahlian/program-keahlian/ProgramKeahlian.add.vue'], resolve),
+                navbar: resolve => require(['~/components/Navbar.vue'], resolve),
+                sidebar: resolve => require(['~/components/Sidebar.vue'], resolve)
+            },
+            meta: {
+                title: "Add Program Keahlian"
+            }
+        },
+        {
+            path: '/admin/program-keahlian/:id',
+            components: {
+                main: resolve => require(['~/components/bantenprov/program-keahlian/program-keahlian/ProgramKeahlian.show.vue'], resolve),
+                navbar: resolve => require(['~/components/Navbar.vue'], resolve),
+                sidebar: resolve => require(['~/components/Sidebar.vue'], resolve)
+            },
+            meta: {
+                title: "View Program Keahlian"
+            }
+        },
+        {
+            path: '/admin/program-keahlian/:id/edit',
+            components: {
+                main: resolve => require(['~/components/bantenprov/program-keahlian/program-keahlian/ProgramKeahlian.edit.vue'], resolve),
+                navbar: resolve => require(['~/components/Navbar.vue'], resolve),
+                sidebar: resolve => require(['~/components/Sidebar.vue'], resolve)
+            },
+            meta: {
+                title: "Edit Program Keahlian"
+            }
+        },
+        //...
+    ]
+},
 ```

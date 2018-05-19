@@ -104,14 +104,14 @@ export default {
     }
   },
   mounted: function () {
-    axios.get('/json/bantenprov/program-keahlian/program-keahlian-pie-020.json').then(response => {
+    axios.get('/json/bantenprov/program-keahlian/program-keahlian/program-keahlian-pie-020.json').then(response => {
 
       let ke = 0;
 
       var res = response.data;
 
       this.pie.series[0].data = res[0].series[0].data;
-      this.pie.title.text = res[0].xAxis.region + ' ' + res[0].xAxis.name + ' ' + res[0].xAxis.opd;
+      this.pie.title.text = res[0].xAxis.title;
 
       // interval
       let i = 0;
@@ -119,7 +119,7 @@ export default {
       setInterval(() => {
 
         this.pie.series[0].data = res[i].series[0].data;
-        this.pie.title.text = res[i].xAxis.region + ' ' + res[i].xAxis.name + ' ' + res[i].xAxis.opd;
+        this.pie.title.text = res[i].xAxis.title;
 
         i++;
 

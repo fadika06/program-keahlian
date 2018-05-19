@@ -25,7 +25,7 @@
         <div class="card h-100" style="color: #fff; background-color: #009688;">
           <div class="card-header">
             <i class="fa fa-bar-chart" aria-hidden="true"></i>
-            Anggaran dan Penyereapan Berdasarkan OPD
+            Rasio Grup Kesenian Berdasarkan Wilayah
           </div>
           <div class="card-body">
             <program-keahlian-bar-01></program-keahlian-bar-01>
@@ -36,7 +36,7 @@
         <div class="card h-100" style="color: #fff; background-color: #FF9800;">
           <div class="card-header">
             <i class="fa fa-pie-chart" aria-hidden="true"></i>
-            Anggaran dan Penyereapan Berdasarkan OPD
+            Rasio Grup Kesenian Berdasarkan Tahun
           </div>
           <div class="card-body">
             <program-keahlian-pie-01></program-keahlian-pie-01>
@@ -52,7 +52,7 @@
         <div class="card h-100" style="color: #fff; background-color: #F44336;">
           <div class="card-header">
             <i class="fa fa-pie-chart" aria-hidden="true"></i>
-            Anggaran dan penyerapan per bulan tiap OPD
+            Rasio Grup Kesenian Berdasarkan Wilayah
           </div>
           <div class="card-body">
             <program-keahlian-pie-02></program-keahlian-pie-02>
@@ -63,7 +63,7 @@
         <div class="card text-white bg-dark h-100">
           <div class="card-header">
             <i class="fa fa-bar-chart" aria-hidden="true"></i>
-            Anggaran dan penyerapan per bulan tiap OPD
+            Rasio Grup Kesenian Berdasarkan Tahun
           </div>
           <div class="card-body">
             <program-keahlian-bar-02></program-keahlian-bar-02>
