@@ -1,21 +1,24 @@
 <?php
 
-Route::group(['prefix' => 'api/program-keahlian', 'middleware' => ['auth']], function() {
-    $controllers = (object) [
-        'index'     => 'Bantenprov\ProgramKeahlian\Http\Controllers\ProgramKeahlianController@index',
-        'create'    => 'Bantenprov\ProgramKeahlian\Http\Controllers\ProgramKeahlianController@create',
-        'store'     => 'Bantenprov\ProgramKeahlian\Http\Controllers\ProgramKeahlianController@store',
-        'show'      => 'Bantenprov\ProgramKeahlian\Http\Controllers\ProgramKeahlianController@show',
-        'edit'      => 'Bantenprov\ProgramKeahlian\Http\Controllers\ProgramKeahlianController@edit',
-        'update'    => 'Bantenprov\ProgramKeahlian\Http\Controllers\ProgramKeahlianController@update',
-        'destroy'   => 'Bantenprov\ProgramKeahlian\Http\Controllers\ProgramKeahlianController@destroy',
+Route::group(['prefix' => 'api/program-keahlian', 'middleware' => ['auth', 'role:superadministrator']], function() {
+    $class          = 'Bantenprov\ProgramKeahlian\Http\Controllers\ProgramKeahlianController';
+    $name           = 'program-keahlian';
+    $controllers    = (object) [
+        'index'     => $class.'@index',
+        'get'       => $class.'@get',
+        'create'    => $class.'@create',
+        'show'      => $class.'@show',
+        'store'     => $class.'@store',
+        'edit'      => $class.'@edit',
+        'update'    => $class.'@update',
+        'destroy'   => $class.'@destroy',
     ];
 
-    Route::get('/',             $controllers->index)->name('program-keahlian.index');
-    Route::get('/create',       $controllers->create)->name('program-keahlian.create');
-    Route::post('/',            $controllers->store)->name('program-keahlian.store');
-    Route::get('/{id}',         $controllers->show)->name('program-keahlian.show');
-    Route::get('/{id}/edit',    $controllers->edit)->name('program-keahlian.edit');
-    Route::put('/{id}',         $controllers->update)->name('program-keahlian.update');
-    Route::delete('/{id}',      $controllers->destroy)->name('program-keahlian.destroy');
+    Route::get('/',             $controllers->index)->name($name.'.index')->middleware('role:superadministrator');
+    Route::get('/create',       $controllers->create)->name($name.'.create')->middleware('role:superadministrator');
+    Route::post('/',            $controllers->store)->name($name.'.store')->middleware('role:superadministrator');
+    Route::get('/{id}',         $controllers->show)->name($name.'.show')->middleware('role:superadministrator');
+    Route::get('/{id}/edit',    $controllers->edit)->name($name.'.edit')->middleware('role:superadministrator');
+    Route::put('/{id}',         $controllers->update)->name($name.'.update')->middleware('role:superadministrator');
+    Route::delete('/{id}',      $controllers->destroy)->name($name.'.destroy')->middleware('role:superadministrator');
 });
