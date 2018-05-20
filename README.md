@@ -99,6 +99,7 @@ php artisan db:seed --class=BantenprovProgramKeahlianSeeder
 - Seeding secara individual
 
 ```bash
+php artisan db:seed --class=BantenprovProgramKeahlianSeederProgramKeahlian
 ```
 
 #### Edit menu `resources/assets/js/menu.js`
