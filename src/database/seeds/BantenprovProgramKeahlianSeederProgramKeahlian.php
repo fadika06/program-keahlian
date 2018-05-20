@@ -47,7 +47,7 @@ class BantenprovProgramKeahlianSeederProgramKeahlian extends Seeder
 
         foreach($this->readCSV() as $data){
 
-            $this->model->updateOrCreate(
+            $this->model->withTrashed()->updateOrCreate(
                 [
                     'id' => $data['id'],
                 ],
