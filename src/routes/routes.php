@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['prefix' => 'api/program-keahlian', 'middleware' => ['web']], function() {
+Route::group(['prefix' => 'api/program-keahlian', 'middleware' => ['auth']], function() {
     $controllers = (object) [
         'index'     => 'Bantenprov\ProgramKeahlian\Http\Controllers\ProgramKeahlianController@index',
         'create'    => 'Bantenprov\ProgramKeahlian\Http\Controllers\ProgramKeahlianController@create',
