@@ -15,6 +15,7 @@ Route::group(['prefix' => 'api/program-keahlian', 'middleware' => ['auth', 'role
     ];
 
     Route::get('/',             $controllers->index)->name($name.'.index')->middleware('role:superadministrator');
+    Route::get('/get',          $controllers->get)->name($name.'.get')->middleware('role:superadministrator');
     Route::get('/create',       $controllers->create)->name($name.'.create')->middleware('role:superadministrator');
     Route::post('/',            $controllers->store)->name($name.'.store')->middleware('role:superadministrator');
     Route::get('/{id}',         $controllers->show)->name($name.'.show')->middleware('role:superadministrator');
