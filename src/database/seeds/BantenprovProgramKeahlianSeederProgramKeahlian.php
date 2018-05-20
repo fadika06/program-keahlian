@@ -49,13 +49,13 @@ class BantenprovProgramKeahlianSeederProgramKeahlian extends Seeder
 
             $this->model->withTrashed()->updateOrCreate(
                 [
-                    'id' => $data['id'],
+                    'id'    => $data['id'],
                 ],
                 [
-                    'id' => $data['id'],
-                    'label' => $data['label'],
-                    'keterangan' => $data['keterangan'],
-                    'user_id' => $data['user_id'],
+                    'id'            => $data['id'],
+                    'label'         => $data['label'],
+                    'keterangan'    => $data['keterangan'],
+                    'user_id'       => $data['user_id'],
                 ]
             );
 
@@ -96,10 +96,10 @@ class BantenprovProgramKeahlianSeederProgramKeahlian extends Seeder
         $row = 1;
         while(($data = fgetcsv($file, 1000, ",")) !== FALSE){
             $all_data[] = [
-                'id' => $data[0],
-                'label' => $data[1],
-                'keterangan' => $data[2],
-                'user_id' => $data[3],
+                'id'            => $data[0],
+                'label'         => $data[1],
+                'keterangan'    => $data[2],
+                'user_id'       => $data[3],
             ];
         }
         fclose($file);
