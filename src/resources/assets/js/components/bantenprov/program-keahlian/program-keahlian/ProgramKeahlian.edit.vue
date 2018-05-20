@@ -1,115 +1,106 @@
 <template>
   <div class="card">
     <div class="card-header">
-      <i class="fa fa-table" aria-hidden="true"></i> Edit Program Keahlian
+      <i class="fa fa-table" aria-hidden="true"></i> {{ title }}
 
-      <ul class="nav nav-pills card-header-pills pull-right">
-        <li class="nav-item">
-          <button class="btn btn-primary btn-sm" role="button" @click="back">
-            <i class="fa fa-arrow-left" aria-hidden="true"></i>
-          </button>
-        </li>
-      </ul>
+      <div class="btn-group pull-right" role="group" style="display:flex;">
+        <button class="btn btn-primary btn-sm" role="button" @click="createRow">
+          <i class="fa fa-plus" aria-hidden="true"></i>
+        </button>
+        <button class="btn btn-info btn-sm" role="button" @click="viewRow">
+          <i class="fa fa-eye" aria-hidden="true"></i>
+        </button>
+        <button class="btn btn-danger btn-sm" role="button" @click="deleteRow">
+          <i class="fa fa-trash" aria-hidden="true"></i>
+        </button>
+        <button class="btn btn-default btn-sm" role="button" @click="back">
+          <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </button>
+      </div>
     </div>
 
     <div class="card-body">
-       <vue-form class="form-horizontal form-validation" :state="state" @submit.prevent="onSubmit">
-
-        <validate tag="div">
-          <div class="form-group">
-            <label for="label">Label</label>
-            <input type="text" class="form-control" id="label" v-model="model.label" name="label" placeholder="Label" required autofocus>
-            <field-messages name="label" show="$invalid && $submitted" class="text-danger">
-              <small class="form-text text-success">Looks good!</small>
-              <small class="form-text text-danger" slot="required">This field is a required field</small>
-            </field-messages>
-          </div>
-        </validate>
-
-        <validate tag="div">
-          <div class="form-group">
-            <label for="keterangan">Keterangan</label>
-            <input type="text" class="form-control" id="keterangan" v-model="model.keterangan" name="keterangan" placeholder="keterangan" required>
-            <field-messages name="keterangan" show="$invalid && $submitted" class="text-danger">
-              <small class="form-text text-success">Looks good!</small>
-              <small class="form-text text-danger" slot="required">This field is a required field</small>
-            </field-messages>
-          </div>
-        </validate>
-
+      <vue-form class="form-horizontal form-validation" :state="state" @submit.prevent="onSubmit">
         <div class="form-row mt-4">
           <div class="col-md">
             <validate tag="div">
-            <label for="user_id">Username</label>
-            <v-select name="user_id" v-model="model.user" :options="user" class="mb-4"></v-select>
+              <label for="label">Label</label>
+              <input type="text" class="form-control" name="label" v-model="model.label" placeholder="Label" required autofocus>
 
-            <field-messages name="user_id" show="$invalid && $submitted" class="text-danger">
-              <small class="form-text text-success">Looks good!</small>
-              <small class="form-text text-danger" slot="required">Username is a required field</small>
-            </field-messages>
+              <field-messages name="label" show="$invalid && $submitted" class="text-danger">
+                <small class="form-text text-success">Looks good!</small>
+                <small class="form-text text-danger" slot="required">Label is a required field</small>
+              </field-messages>
             </validate>
           </div>
         </div>
 
-        <div class="form-group">
-          <button type="submit" class="btn btn-primary">Submit</button>
-          <button type="reset" class="btn btn-secondary" @click="reset">Reset</button>
+        <div class="form-row mt-4">
+          <div class="col-md">
+            <validate tag="div">
+              <label for="keterangan">Keterangan</label>
+              <input type="text" class="form-control" name="keterangan" v-model="model.keterangan" placeholder="Keterangan" required>
+
+              <field-messages name="keterangan" show="$invalid && $submitted" class="text-danger">
+                <small class="form-text text-success">Looks good!</small>
+                <small class="form-text text-danger" slot="required">Keterangan is a required field</small>
+              </field-messages>
+            </validate>
+          </div>
         </div>
 
+        <div class="form-row mt-4">
+          <div class="col-md">
+            <validate tag="div">
+              <label for="user_id">Username</label>
+              <v-select name="user_id" v-model="model.user" :options="user" placeholder="Username" required></v-select>
+
+              <field-messages name="user_id" show="$invalid && $submitted" class="text-danger">
+                <small class="form-text text-success">Looks good!</small>
+                <small class="form-text text-danger" slot="required">User is a required field</small>
+              </field-messages>
+            </validate>
+          </div>
+        </div>
+
+        <div class="form-row mt-4">
+          <div class="col-md">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="reset" class="btn btn-secondary" @click="reset">Reset</button>
+          </div>
+        </div>
       </vue-form>
     </div>
   </div>
 </template>
 
 <script>
+import swal from 'sweetalert2';
+
 export default {
-  mounted() {
-    axios.get('api/program-keahlian/' + this.$route.params.id + '/edit')
-      .then(response => {
-        if (response.data.status == true) {
-
-          this.model.keterangan     = response.data.program_keahlian.keterangan;
-          this.model.label          = response.data.program_keahlian.label;
-          this.model.old_user_id    = response.data.program_keahlian.user_id;
-          this.model.user           = response.data.user;
-          this.model.old_user       = response.data.program_keahlian.user;
-
-
-        } else {
-          alert('Failed');
-        }
-      })
-      .catch(function(response) {
-        alert('Break');
-        window.location.href = '#/admin/program-keahlian';
-      });
-
-      axios.get('api/program-keahlian/create')
-      .then(response => {
-          if(response.data.user_special == true){
-            response.data.user.forEach(user_element => {
-              this.user.push(user_element);
-            });
-          }else{
-            this.user.push(response.data.user);
-          }
-      })
-      .catch(function(response) {
-        alert('Break');
-        window.location.href = '#/admin/program-keahlian';
-      })
-  },
   data() {
     return {
-      state: {},
-      model: {
-        keterangan:          "",
-        label:               "",
-        user:                "",
-
+      state: {
+        //
       },
-      user: []
+      title: 'Add Program Keahlian',
+      model: {
+        id          : '',
+        label       : '',
+        keterangan  : '',
+        nilai       : '',
+        user_id     : '',
+        created_at  : '',
+        updated_at  : '',
+        deleted_at  : '',
+
+        user        : '',
+      },
+      user  : [],
     }
+  },
+  mounted(){
+    this.reset();
   },
   methods: {
     onSubmit: function() {
@@ -118,47 +109,155 @@ export default {
       if (this.state.$invalid) {
         return;
       } else {
-        axios.put('api/program-keahlian/' + this.$route.params.id, {
-            user_id:            this.model.user.id,
-            old_user_id:        this.model.old_user_id,
-            keterangan:         this.model.keterangan,
-            label:              this.model.label,
+        axios.put('api/program-keahlian/'+this.$route.params.id, {
+            label       : this.model.label,
+            keterangan  : this.model.keterangan,
+            user_id     : this.model.user.id,
           })
           .then(response => {
             if (response.data.status == true) {
-              if(response.data.message == 'success'){
-                alert(response.data.message);
+              if (response.data.error == false) {
+                swal(
+                  'Updated',
+                  'Yeah!!! Your data has been updated.',
+                  'success',
+                );
+
                 app.back();
-              }else{
-                alert(response.data.message);
+              } else {
+                swal(
+                  'Failed',
+                  'Oops... '+response.data.message,
+                  'error',
+                );
               }
             } else {
-              alert(response.data.message);
+              swal(
+                'Failed',
+                'Oops... '+response.data.message,
+                'error',
+              );
+
+              app.back();
             }
           })
           .catch(function(response) {
-            alert('Break ' + response.data.message);
+            swal(
+              'Not Found',
+              'Oops... Your page is not found.',
+              'error',
+            );
+
+            app.back();
           });
       }
     },
     reset() {
-      axios.get('api/program-keahlian/' + this.$route.params.id + '/edit')
+      let app = this;
+
+      axios.get('api/program-keahlian/'+this.$route.params.id+'/edit')
         .then(response => {
-          if (response.data.status == true) {
-            this.model.user           = response.data.program_keahlian.user;
-            this.model.keterangan     = response.data.program_keahlian.keterangan;
-            this.model.label          = response.data.program_keahlian.label;
+          if (response.data.status == true && response.data.error == false) {
+            this.model.id         = response.data.program_keahlian.id;
+            this.model.label      = response.data.program_keahlian.label;
+            this.model.keterangan = response.data.program_keahlian.keterangan;
+            this.model.user_id    = response.data.program_keahlian.user_id;
+            this.model.created_at = response.data.program_keahlian.created_at;
+            this.model.updated_at = response.data.program_keahlian.updated_at;
+            this.model.deleted_at = response.data.program_keahlian.deleted_at;
+
+            if (response.data.program_keahlian.user === null) {
+              this.model.user = response.data.current_user;
+            } else {
+              this.model.user = response.data.program_keahlian.user;
+            }
+
+            if (response.data.user_special == true) {
+              this.user = response.data.users;
+            } else {
+              this.user.push(response.data.users);
+            }
           } else {
-            alert('Failed');
+            swal(
+              'Failed',
+              'Oops... '+response.data.message,
+              'error',
+            );
+
+            app.back();
           }
         })
         .catch(function(response) {
-          alert('Break ');
+          swal(
+            'Not Found',
+            'Oops... Your page is not found.',
+            'error',
+          );
+
+          app.back();
         });
+    },
+    createRow() {
+      window.location = '#/admin/program-keahlian/create';
+    },
+    viewRow() {
+      window.location = '#/admin/program-keahlian/'+this.$route.params.id;
+    },
+    deleteRow() {
+      let app = this;
+
+      swal({
+        title: 'Are you sure?',
+        text: 'You won\'t be able to revert this!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger',
+        buttonsStyling: false,
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.value) {
+          axios.delete('/api/program-keahlian/'+this.$route.params.id)
+            .then(function(response) {
+              if (response.data.status == true) {
+                app.back();
+
+                swal(
+                  'Deleted',
+                  'Yeah!!! Your data has been deleted.',
+                  'success',
+                );
+              } else {
+                swal(
+                  'Failed',
+                  'Oops... Failed to delete data.',
+                  'error',
+                );
+              }
+            })
+            .catch(function(response) {
+              swal(
+                'Not Found',
+                'Oops... Your page is not found.',
+                'error',
+              );
+            });
+        } else if (result.dismiss === swal.DismissReason.cancel) {
+          swal(
+            'Cancelled',
+            'Your data is safe.',
+            'error',
+          );
+        }
+      });
     },
     back() {
       window.location = '#/admin/program-keahlian';
-    }
-  }
+    },
+  },
 }
 </script>
