@@ -28,6 +28,7 @@ class ProgramKeahlianController extends Controller
     protected $program_keahlian;
     protected $user;
     protected $admin_sekolah;
+    protected $user_id;
 
     /**
      * Create a new controller instance.
@@ -38,8 +39,8 @@ class ProgramKeahlianController extends Controller
     {
         $this->program_keahlian = new ProgramKeahlian;
         $this->user             = new User;
-        $this->user_id          = isset(Auth::User()->id) ? Auth::User()->id : null;
         $this->admin_sekolah    = AdminSekolah::where('admin_sekolah_id', $this->user_id)->first();
+        $this->user_id          = isset(Auth::User()->id) ? Auth::User()->id : null;
     }
 
     /**
@@ -105,7 +106,7 @@ class ProgramKeahlianController extends Controller
 
         $response['program_keahlians']  = $program_keahlians;
         $response['error']              = false;
-        $response['message']            = 'Success';
+        $response['message']            = 'Success.';
         $response['status']             = true;
 
         if (is_null($this->admin_sekolah) && !Auth::User()->hasRole(['superadministrator'])) {
@@ -155,7 +156,7 @@ class ProgramKeahlianController extends Controller
         $response['user_special']       = $user_special;
         $response['current_user']       = $current_user;
         $response['error']              = false;
-        $response['message']            = 'Success';
+        $response['message']            = 'Loaded.';
         $response['status']             = true;
 
         return response()->json($response);
@@ -193,7 +194,7 @@ class ProgramKeahlianController extends Controller
             $program_keahlian->save();
 
             $error      = false;
-            $message    = 'Success';
+            $message    = 'Success.';
         }
 
         $response['program_keahlian']   = $program_keahlian;
@@ -216,7 +217,7 @@ class ProgramKeahlianController extends Controller
 
         $response['program_keahlian']   = $program_keahlian;
         $response['error']              = false;
-        $response['message']            = 'Success';
+        $response['message']            = 'Loaded.';
         $response['status']             = true;
 
         return response()->json($response);
@@ -258,12 +259,20 @@ class ProgramKeahlianController extends Controller
 
         array_set($current_user, 'label', $current_user->name);
 
+        if (Auth::User()->hasRole(['superadministrator']) || $program_keahlian->user_id == $this->user_id) {
+            $error      = false;
+            $message    = 'Loaded.';
+        } else {
+            $error      = true;
+            $message    = 'The data can not be loaded because it is not yours.';
+        }
+
         $response['program_keahlian']   = $program_keahlian;
         $response['users']              = $users;
         $response['user_special']       = $user_special;
         $response['current_user']       = $current_user;
-        $response['error']              = false;
-        $response['message']            = 'Success';
+        $response['error']              = $error;
+        $response['message']            = $message;
         $response['status']             = true;
 
         return response()->json($response);
@@ -299,10 +308,15 @@ class ProgramKeahlianController extends Controller
                 $program_keahlian->user_id  = $this->user_id;
             }
 
-            $program_keahlian->save();
+            if (Auth::User()->hasRole(['superadministrator']) || $program_keahlian->user_id == $this->user_id) {
+                $program_keahlian->save();
 
-            $error      = false;
-            $message    = 'Success';
+                $error      = false;
+                $message    = 'Success.';
+            } else {
+                $error      = true;
+                $message    = 'The data can not be updated because it is not yours.';
+            }
         }
 
         $response['error']      = $error;
@@ -322,15 +336,22 @@ class ProgramKeahlianController extends Controller
     {
         $program_keahlian = $this->program_keahlian->findOrFail($id);
 
-        if ($program_keahlian->delete()) {
-            $response['message']    = 'Success';
-            $response['success']    = true;
-            $response['status']     = true;
+        if (Auth::User()->hasRole(['superadministrator']) || $program_keahlian->user_id == $this->user_id) {
+            if ($program_keahlian->delete()) {
+                $error      = false;
+                $message    = 'Success.';
+            } else {
+                $error      = true;
+                $message    = 'Failed';
+            }
         } else {
-            $response['message']    = 'Failed';
-            $response['success']    = false;
-            $response['status']     = false;
+            $error      = true;
+            $message    = 'The data can not be deleted because it is not yours.';
         }
+
+        $response['error']      = $error;
+        $response['message']    = $message;
+        $response['status']     = true;
 
         return json_encode($response);
     }

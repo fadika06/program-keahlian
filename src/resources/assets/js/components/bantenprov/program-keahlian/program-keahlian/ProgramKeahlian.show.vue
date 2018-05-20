@@ -136,7 +136,7 @@ export default {
         if (result.value) {
           axios.delete('/api/program-keahlian/'+this.$route.params.id)
             .then(function(response) {
-              if (response.data.status == true) {
+              if (response.data.status == true && response.data.error == false) {
                 app.back();
 
                 swal(
@@ -147,7 +147,7 @@ export default {
               } else {
                 swal(
                   'Failed',
-                  'Oops... Failed to delete data.',
+                  'Oops... '+response.data.message,
                   'error',
                 );
               }
