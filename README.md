@@ -49,6 +49,25 @@ git clone https://github.com/bantenprov/program-keahlian.git
     //...
     Bantenprov\ProgramKeahlian\ProgramKeahlianServiceProvider::class,
     //...
+],
+```
+
+#### Edit `app/Http/Kernel.php`
+
+```php
+protected $routeMiddleware = [
+    'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
+    'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+    'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+    'can' => \Illuminate\Auth\Middleware\Authorize::class,
+    'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+    'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+    //...
+    'role' => \Laratrust\Middleware\LaratrustRole::class,
+    'permission' => \Laratrust\Middleware\LaratrustPermission::class,
+    'ability' => \Laratrust\Middleware\LaratrustAbility::class,
+    //...
+];
 ```
 
 #### Lakukan migrate :
