@@ -233,7 +233,7 @@ export default {
       };
 
       Vue.nextTick(() => this.$refs.vuetable.refresh());
-    }
+    },
   },
 }
 </script>
