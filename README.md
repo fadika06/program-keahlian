@@ -201,7 +201,7 @@ Vue.component('program-keahlian-pie-03', ProgramKeahlianPie03);
             },
             meta: {
                 title: "Program Keahlian",
-            }
+            },
         },
         //...
     ]
@@ -225,7 +225,7 @@ Vue.component('program-keahlian-pie-03', ProgramKeahlianPie03);
             },
             meta: {
                 title: "Program Keahlian",
-            }
+            },
         },
         {
             path: '/admin/program-keahlian/create',
@@ -236,7 +236,7 @@ Vue.component('program-keahlian-pie-03', ProgramKeahlianPie03);
             },
             meta: {
                 title: "Add Program Keahlian",
-            }
+            },
         },
         {
             path: '/admin/program-keahlian/:id',
@@ -247,7 +247,7 @@ Vue.component('program-keahlian-pie-03', ProgramKeahlianPie03);
             },
             meta: {
                 title: "View Program Keahlian",
-            }
+            },
         },
         {
             path: '/admin/program-keahlian/:id/edit',
@@ -258,7 +258,7 @@ Vue.component('program-keahlian-pie-03', ProgramKeahlianPie03);
             },
             meta: {
                 title: "Edit Program Keahlian",
-            }
+            },
         },
         //...
     ]
