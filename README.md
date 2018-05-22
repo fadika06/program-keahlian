@@ -115,7 +115,7 @@ php artisan db:seed --class=BantenprovProgramKeahlianSeederProgramKeahlian
         {
             name: 'Program Keahlian',
             link: '/dashboard/program-keahlian',
-            icon: 'fa fa-angle-double-right'
+            icon: 'fa fa-angle-double-right',
         },
         //...
     ]
@@ -133,7 +133,7 @@ php artisan db:seed --class=BantenprovProgramKeahlianSeederProgramKeahlian
         {
             name: 'Program Keahlian',
             link: '/admin/program-keahlian',
-            icon: 'fa fa-angle-double-right'
+            icon: 'fa fa-angle-double-right',
         },
         //...
     ]
@@ -197,10 +197,10 @@ Vue.component('program-keahlian-pie-03', ProgramKeahlianPie03);
             components: {
                 main: resolve => require(['~/components/views/bantenprov/program-keahlian/program-keahlian/ProgramKeahlianDashboard.vue'], resolve),
                 navbar: resolve => require(['~/components/Navbar.vue'], resolve),
-                sidebar: resolve => require(['~/components/Sidebar.vue'], resolve)
+                sidebar: resolve => require(['~/components/Sidebar.vue'], resolve),
             },
             meta: {
-                title: "Program Keahlian"
+                title: "Program Keahlian",
             }
         },
         //...
@@ -221,10 +221,10 @@ Vue.component('program-keahlian-pie-03', ProgramKeahlianPie03);
             components: {
                 main: resolve => require(['~/components/bantenprov/program-keahlian/program-keahlian/ProgramKeahlian.index.vue'], resolve),
                 navbar: resolve => require(['~/components/Navbar.vue'], resolve),
-                sidebar: resolve => require(['~/components/Sidebar.vue'], resolve)
+                sidebar: resolve => require(['~/components/Sidebar.vue'], resolve),
             },
             meta: {
-                title: "Program Keahlian"
+                title: "Program Keahlian",
             }
         },
         {
@@ -232,10 +232,10 @@ Vue.component('program-keahlian-pie-03', ProgramKeahlianPie03);
             components: {
                 main: resolve => require(['~/components/bantenprov/program-keahlian/program-keahlian/ProgramKeahlian.add.vue'], resolve),
                 navbar: resolve => require(['~/components/Navbar.vue'], resolve),
-                sidebar: resolve => require(['~/components/Sidebar.vue'], resolve)
+                sidebar: resolve => require(['~/components/Sidebar.vue'], resolve),
             },
             meta: {
-                title: "Add Program Keahlian"
+                title: "Add Program Keahlian",
             }
         },
         {
@@ -243,10 +243,10 @@ Vue.component('program-keahlian-pie-03', ProgramKeahlianPie03);
             components: {
                 main: resolve => require(['~/components/bantenprov/program-keahlian/program-keahlian/ProgramKeahlian.show.vue'], resolve),
                 navbar: resolve => require(['~/components/Navbar.vue'], resolve),
-                sidebar: resolve => require(['~/components/Sidebar.vue'], resolve)
+                sidebar: resolve => require(['~/components/Sidebar.vue'], resolve),
             },
             meta: {
-                title: "View Program Keahlian"
+                title: "View Program Keahlian",
             }
         },
         {
@@ -254,10 +254,10 @@ Vue.component('program-keahlian-pie-03', ProgramKeahlianPie03);
             components: {
                 main: resolve => require(['~/components/bantenprov/program-keahlian/program-keahlian/ProgramKeahlian.edit.vue'], resolve),
                 navbar: resolve => require(['~/components/Navbar.vue'], resolve),
-                sidebar: resolve => require(['~/components/Sidebar.vue'], resolve)
+                sidebar: resolve => require(['~/components/Sidebar.vue'], resolve),
             },
             meta: {
-                title: "Edit Program Keahlian"
+                title: "Edit Program Keahlian",
             }
         },
         //...
