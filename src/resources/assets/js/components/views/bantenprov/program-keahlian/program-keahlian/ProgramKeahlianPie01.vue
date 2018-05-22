@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%; height: 200px;">
+  <div style="width: 100%; height: 400px;">
     <IEcharts :option="pie" :resizable="true"></IEcharts>
   </div>
 </template>
@@ -55,15 +55,15 @@ export default {
         visualMap: {
           show: true,
           type: 'continuous',
-          orient: 'vertical',
-          right: 0,
-          y: 'center',
+          orient: 'horizontal',
+          bottom: 30,
+          x: 'center',
           min: 100,
-          max: 700,
+          max: 600,
           text: ['High', 'Low'],
           calculable : false,
           inRange: {
-            color: ['#F0F4C3', '#DCE775', '#CDDC39'],
+            color: ['#B9F6CA', '#69F0AE', '#00C853'],
           },
           textStyle: {
             color: '#fff'
@@ -104,14 +104,14 @@ export default {
     }
   },
   mounted: function () {
-    axios.get('/json/bantenprov/program-keahlian/program-keahlian-pie-030.json').then(response => {
+    axios.get('/json/bantenprov/program-keahlian/program-keahlian/program-keahlian-pie-010.json').then(response => {
 
       let ke = 0;
 
       var res = response.data;
 
       this.pie.series[0].data = res[0].series[0].data;
-      this.pie.title.text = res[0].xAxis.region + ' ' + res[0].xAxis.name + ' ' + res[0].xAxis.opd;
+      this.pie.title.text = res[0].xAxis.title;
 
       // interval
       let i = 0;
@@ -119,7 +119,7 @@ export default {
       setInterval(() => {
 
         this.pie.series[0].data = res[i].series[0].data;
-        this.pie.title.text = res[i].xAxis.region + ' ' + res[i].xAxis.name + ' ' + res[i].xAxis.opd;
+        this.pie.title.text = res[i].xAxis.title;
 
         i++;
 

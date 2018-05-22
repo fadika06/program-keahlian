@@ -12,24 +12,23 @@ class ProgramKeahlian extends Model
     public $timestamps = true;
 
     protected $table = 'program_keahlians';
-    protected $dates = [
-        'deleted_at'
-    ];
     protected $fillable = [
         'label',
         'keterangan',
         'user_id',
     ];
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [];
+    protected $hidden = [
+        //
+    ];
+    protected $appends = [
+        //
+    ];
+    protected $dates = [
+        'deleted_at',
+    ];
 
-        public function user()
+    public function user()
     {
-        return $this->belongsTo('App\User','user_id');
+        return $this->belongsTo('App\User', 'user_id');
     }
-
-}
+ }
