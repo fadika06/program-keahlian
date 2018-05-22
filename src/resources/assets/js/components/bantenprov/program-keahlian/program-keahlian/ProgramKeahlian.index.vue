@@ -6,7 +6,7 @@
       <ul class="nav nav-pills card-header-pills pull-right">
         <li class="nav-item">
           <button class="btn btn-primary btn-sm" role="button" @click="createRow">
-          	<i class="fa fa-plus" aria-hidden="true"></i>
+            <i class="fa fa-plus" aria-hidden="true"></i>
           </button>
         </li>
       </ul>
@@ -26,12 +26,12 @@
 
       <div class="table-responsive">
         <vuetable ref="vuetable"
-          api-url="/api/program-keahlian"
+          :api-url="api_url"
           :fields="fields"
           :sort-order="sortOrder"
           :css="css.table"
           pagination-path=""
-          :per-page="5"
+          :per-page="10"
           :append-params="moreParams"
           @vuetable:pagination-data="onPaginationData"
           @vuetable:loading="onLoading"
@@ -74,58 +74,58 @@
 </style>
 
 <script>
+import swal from 'sweetalert2';
 import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo';
 
 export default {
   components: {
-    VuetablePaginationInfo
+    VuetablePaginationInfo,
   },
   data() {
     return {
-      title: 'Program Keahlian',
       loading: true,
+      title: 'Program Keahlian',
+      api_url: '/api/program-keahlian',
       fields: [
         {
           name: '__sequence',
           title: '#',
           titleClass: 'center aligned',
-          dataClass: 'right aligned'
+          dataClass: 'right aligned',
         },
         {
           name: 'label',
           title: 'Label',
           sortField: 'label',
-          titleClass: 'center aligned'
+          titleClass: 'center aligned',
         },
         {
           name: 'keterangan',
           title: 'Keterangan',
           sortField: 'keterangan',
-          titleClass: 'center aligned'
-        },
-        {
-          name: 'user.name',
-          title: 'Username',
-          sortField: 'user_id',
-          titleClass: 'center aligned'
+          titleClass: 'center aligned',
         },
         {
           name: '__slot:actions',
           title: 'Actions',
           titleClass: 'center aligned',
-          dataClass: 'center aligned'
+          dataClass: 'center aligned',
         },
       ],
-      sortOrder: [{
-        field: 'label',
-        direction: 'asc'
-      }],
-      moreParams: {},
+      sortOrder: [
+        {
+          field: 'label',
+          direction: 'asc',
+        },
+      ],
+      moreParams: {
+        //
+      },
       css: {
         table: {
           tableClass: 'table table-hover',
           ascendingIcon: 'fa fa-chevron-up',
-          descendingIcon: 'fa fa-chevron-down'
+          descendingIcon: 'fa fa-chevron-down',
         },
         pagination: {
           wrapperClass: 'vuetable-pagination btn-group',
@@ -137,39 +137,13 @@ export default {
             first: 'fa fa-angle-double-left',
             prev: 'fa fa-angle-left',
             next: 'fa fa-angle-right',
-            last: 'fa fa-angle-double-right'
-          }
-        }
-      }
+            last: 'fa fa-angle-double-right',
+          },
+        },
+      },
     }
   },
   methods: {
-    createRow() {
-      window.location = '#/admin/program-keahlian/create';
-    },
-    viewRow(rowData) {
-      window.location = '#/admin/program-keahlian/' + rowData.id;
-    },
-    editRow(rowData) {
-      window.location = '#/admin/program-keahlian/' + rowData.id + '/edit';
-    },
-    deleteRow(rowData) {
-      let app = this;
-
-      if (confirm('Do you really want to delete it?')) {
-        axios.delete('/api/program-keahlian/' + rowData.id)
-          .then(function(response) {
-            if (response.data.status == true) {
-              app.$refs.vuetable.reload()
-            } else {
-              alert('Failed');
-            }
-          })
-          .catch(function(response) {
-            alert('Break');
-          });
-      }
-    },
     onPaginationData(paginationData) {
       this.$refs.pagination.setPaginationData(paginationData);
       this.$refs.paginationInfo.setPaginationData(paginationData);
@@ -182,23 +156,84 @@ export default {
     },
     onLoaded: function() {
       this.loading = false;
-    }
+    },
+    createRow() {
+      window.location = '#/admin/program-keahlian/create';
+    },
+    viewRow(rowData) {
+      window.location = '#/admin/program-keahlian/'+rowData.id;
+    },
+    editRow(rowData) {
+      window.location = '#/admin/program-keahlian/'+rowData.id+'/edit';
+    },
+    deleteRow(rowData) {
+      let app = this;
+
+      swal({
+        title: 'Are you sure?',
+        text: 'You won\'t be able to revert this!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger',
+        buttonsStyling: false,
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.value) {
+          axios.delete('/api/program-keahlian/'+rowData.id)
+            .then(function(response) {
+              if (response.data.status == true && response.data.error == false) {
+                app.$refs.vuetable.reload();
+
+                swal(
+                  'Deleted',
+                  'Yeah!!! Your data has been deleted.',
+                  'success',
+                );
+              } else {
+                swal(
+                  'Failed',
+                  'Oops... '+response.data.message,
+                  'error',
+                );
+              }
+            })
+            .catch(function(response) {
+              swal(
+                'Not Found',
+                'Oops... Your page is not found.',
+                'error',
+              );
+            });
+        } else if (result.dismiss === swal.DismissReason.cancel) {
+          swal(
+            'Cancelled',
+            'Your data is safe.',
+            'error',
+          );
+        }
+      });
+    },
   },
   events: {
     'filter-set' (filterText) {
       this.moreParams = {
-        filter: filterText
-      }
+        filter: filterText,
+      };
 
-      Vue.nextTick(() => this.$refs.vuetable.refresh())
+      Vue.nextTick(() => this.$refs.vuetable.refresh());
     },
     'filter-reset'() {
       this.moreParams = {
         //
-      }
+      };
 
-      Vue.nextTick(() => this.$refs.vuetable.refresh())
-    }
-  }
+      Vue.nextTick(() => this.$refs.vuetable.refresh());
+    },
+  },
 }
 </script>

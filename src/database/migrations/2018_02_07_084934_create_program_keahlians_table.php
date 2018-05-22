@@ -16,7 +16,7 @@ class CreateProgramKeahliansTable extends Migration
 			$table->increments('id');
 			$table->string('label');
 			$table->string('keterangan');
-			$table->integer('user_id');
+			$table->integer('user_id')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 		});
